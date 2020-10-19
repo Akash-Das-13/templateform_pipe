@@ -9,15 +9,15 @@ import { Contact } from '../models/Contact';
 export class ContactComponent implements OnInit {
   // form conatins the name of the Contact and mobile number
   form: any = {};
-// contacts is to store all Contacts data
-contacts: Contact[] = [];
-// message is to display message
-message;
+  // contacts is to store all Contacts data
+  contacts: Contact[] = [];
+  // message is to display message
+  message;
 
-// isContactedAdded is for validating contact is added or not
-isContactedAdded;
-constructor(private userservice: UserService) {}
-// Call UserService and use getAllContacts method to get Contacts data
+  // isContactedAdded is for validating contact is added or not
+  isContactedAdded: boolean=false;
+  constructor(private userservice: UserService) { }
+  // Call UserService and use getAllContacts method to get Contacts data
   ngOnInit() {
     this.userservice.getAllContacts().subscribe(
       data => {
@@ -29,5 +29,25 @@ constructor(private userservice: UserService) {}
   // Display message 'Failed to add Contact' while error handling
   // Display message 'Contact Added' if contact is added
   onSubmit() {
+    this.contacts.forEach(element => {
+      if (element.mobile == this.form.mobile) {
+        this.isContactedAdded=true;
+        this.message='Contact already exists';
+      }
+
+    });
+    if(this.isContactedAdded==false){
+      console.log(this.form)
+      this.userservice.addContact(this.form).subscribe(dat => {
+        this.contacts = dat;
+        
+        this.isContactedAdded=true;
+        this.message='Contact added';
+      },
+      err=>{
+        this.isContactedAdded=true;
+        this.message='Failed to add Contact';
+      })
+    }
   }
 }

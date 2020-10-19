@@ -18,7 +18,7 @@
 
       <!-- Implement ngFor on conatacts to diplay contacts and 
         add search pipe based on searchText-->
-      <tr *ngFor="">
+      <tr *ngFor="let contact of contacts | search:searchText">
         <td>{{contact.name}}</td>
         <td>{{contact.mobile}}</td>
       </tr>
@@ -47,7 +47,7 @@
               Add to contacts
             </button>
               <!-- write logic to display message if form is submitted and contacted is added -->
-              <div class="alert alert-danger" role="alert" *ngIf="">
+              <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isContactedAdded">
                 {{ message }}
               </div>
           </div>
